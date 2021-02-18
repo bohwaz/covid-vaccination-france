@@ -4,7 +4,7 @@ Suivi des disponibilités de vaccination Covid-19 France.
 
 Pull requests bienvenus pour augmenter la collecte de données.
 
-[Visualisation des données](https://bohwaz.github.io/covid-vaccination-france/docs/report.html)
+[Visualisation des données](https://bohwaz.github.io/covid-vaccination-france/report.html)
 
 Des erreurs sont possibles (ou probables)…
 
