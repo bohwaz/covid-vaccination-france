@@ -62,6 +62,13 @@ function update_stats(): void
 	$schema = false;
 
 	foreach ($centres as $uri => $_ignore) {
+		$find_uri = preg_replace('/\?.*$/', '?', $uri);
+
+		if ($db->firstColumn('SELECT 1 FROM stats WHERE uri LIKE ?;', $find_uri . '%')) {
+			debug('Already got: ' . $find_uri);
+			continue;
+		}
+
 		foreach (get_availability($uri) as $stats) {
 			debug('Inserting stats: ' . print_r($stats, true));
 			$data = get_object_vars($stats);
@@ -134,7 +141,7 @@ function get_provider_uri(\stdClass $centre): ?string
 	switch ($url['host'])
 	{
 		case 'partners.doctolib.fr':
-			return 'doctolib://' . basename($url['path']);
+			return 'doctolib://' . trim(basename($url['path']));
 		default:
 			echo 'Unknown provider: ' . $centre->rdv_site_web . PHP_EOL;
 			return null;
@@ -146,9 +153,11 @@ function get_availability_doctolib(string $id): \Generator
 	// https://partners.doctolib.fr/hopital-public/charleville-mezieres/centre-hospitalier-intercommunal-nord-ardennes-charleville-fumay-sedan?pid=practice-164143&enable_cookies_consent=1
 	// https://partners.doctolib.fr/booking/cpts-de-dijon-vaccination-covid-19.json
 
-	$url = sprintf('https://partners.doctolib.fr/booking/%s.json', $id);
-	var_dump($url);
+	$url = sprintf('https://partners.doctolib.fr/booking/%s.json', trim($id));
 	$result = http_get_json($url);
+
+	// Wait a bit
+	usleep(500);
 
 	if (!$result) {
 		return null;

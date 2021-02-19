@@ -58,6 +58,13 @@ class DB extends \SQLite3
 		return $out;
 	}
 
+	public function firstColumn(string $sql, ...$params)
+	{
+		$row = $this->do($sql, ...$params)->fetchArray(\SQLITE3_NUM);
+
+		return $row[0] ?? false;
+	}
+
 	public function first(string $sql, ...$params): ?\stdClass
 	{
 		foreach ($this->iterate($sql, ...$params) as $row) {
