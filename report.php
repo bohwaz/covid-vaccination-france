@@ -26,6 +26,8 @@ function list_current_stats(): \Generator
 
 $total = $db->first('SELECT SUM(available_slots_7d) AS available_slots_7d, SUM(vaccinations_28d) AS vaccinations_28d FROM stats WHERE date = (SELECT MAX(date) FROM stats);');
 
+$date = $db->firstColumn('SELECT MAX(date) FROM stats;');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +65,7 @@ $total = $db->first('SELECT SUM(available_slots_7d) AS available_slots_7d, SUM(v
 
 <body>
 
-<h2>Disponibilités</h2>
+<h2>Disponibilités au <?=htmlspecialchars($date)?></h2>
 
 <table>
 	<thead>
