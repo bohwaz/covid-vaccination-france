@@ -64,7 +64,7 @@ function update_stats(): void
 	foreach ($centres as $uri => $_ignore) {
 		$find_uri = preg_replace('/\?.*$/', '?', $uri);
 
-		if ($db->firstColumn('SELECT 1 FROM stats WHERE uri LIKE ?;', $find_uri . '%')) {
+		if ($db->firstColumn('SELECT 1 FROM stats WHERE uri LIKE ? AND date = date();', $find_uri . '%')) {
 			debug('Already got: ' . $find_uri);
 			continue;
 		}
@@ -157,7 +157,7 @@ function get_availability_doctolib(string $id): \Generator
 	$result = http_get_json($url);
 
 	// Wait a bit
-	usleep(500);
+	sleep(1);
 
 	if (!$result) {
 		return null;
